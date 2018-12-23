@@ -1,0 +1,40 @@
+.title {
+    font-family: Cambria, serif;
+    background-color: aliceblue;
+    border-width: 2px;
+    border-color: chartreuse;
+    width: 200px;
+    child-align: left;
+    border-radius: 10px;
+    text-align: center;
+    padding: 5px;
+    margin-top: 10px;
+    margin-left: -webkit-calc(50% - 100px);
+    border-style: solid;
+}
+
+.myDiv {
+    background-color: aliceblue;
+    width: 200px;
+    height: 120px;
+    border-width: 2px;
+    border-color: chartreuse;
+    border-style: solid;
+    border-radius: 10px;
+    text-align: center;
+    padding: 5px;
+    margin-left: 30px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.dividingDiv {
+    width: 280px;
+    border-width: 1px;
+    border-color: chartreuse;
+    border-style: dashed;
+    border-radius: 20px;
+    float: left;
+    padding-bottom: 80px;
+    margin-right: 26px;
+}
