@@ -1,40 +1,304 @@
-.title {
+body {
+    margin: 0;
+
+    font-size: 14px;
+}
+
+input {
+    width: 80px;
+}
+
+h3, h4 {
+    margin: 5px 0;
+}
+h3 {
+    text-decoration-line: underline;
+}
+
+/*Стили основных элементов разметки интерфейса*/
+
+.taskManager {
+    z-index: 3;
+}
+
+.pM__title, .tM__title {
+    position: fixed;
+    z-index: 1;
+
+    width: 100%;
+    height: 40px;
+
+    border-bottom: 1px solid black;
+
+    text-align: center;
+    line-height: 40px;
+
     font-family: Cambria, serif;
+    font-size: 1.5em;
     background-color: aliceblue;
-    border-width: 2px;
-    border-color: chartreuse;
-    width: 200px;
-    child-align: left;
-    border-radius: 10px;
-    text-align: center;
-    padding: 5px;
-    margin-top: 10px;
-    margin-left: -webkit-calc(50% - 100px);
-    border-style: solid;
 }
 
-.myDiv {
-    background-color: aliceblue;
-    width: 200px;
-    height: 120px;
-    border-width: 2px;
-    border-color: chartreuse;
-    border-style: solid;
-    border-radius: 10px;
-    text-align: center;
-    padding: 5px;
-    margin-left: 30px;
-    margin-top: 30px;
-    margin-bottom: 30px;
+.tM__title {
+    top: 0;
+    left: 0;
 }
 
-.dividingDiv {
-    width: 280px;
-    border-width: 1px;
-    border-color: chartreuse;
-    border-style: dashed;
+.pM__body, .tM__body {
+    position: absolute;
+    top: 40px;
+
+    width: calc(100% - 220px);
+    min-height: calc(100% - 40px);
+
+    background-color: beige;
+}
+
+.pM__sideBlock, .tM__sideBlock {
+    position: fixed;
+    top: 40px;
+    right: 0;
+
+    width: 220px;
+    height: calc(100% - 40px);
+
+    border-top: 1px solid black;
+}
+
+.pM__sideBlock {
+    border-left: 1px solid black;
+
+    background-color: cornsilk;
+}
+.tM__sideBlock {
+    background-color: beige;
+}
+
+/*Стили элементов-объектов интерфейса*/
+
+.widget {
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+
+    box-sizing: border-box;
+    width: 200px;
+    margin: 20px;
+    padding: 10px;
+
+    border: 1px solid black;
+
+    line-height: 2.2em;
+    text-align: center;
+    overflow: hidden;
+
+    background-color: ghostwhite;
     border-radius: 20px;
-    float: left;
-    padding-bottom: 80px;
-    margin-right: 26px;
+}
+.widget.project {
+    max-width: 300px;
+    min-width: 200px;
+    width: auto;
+}
+.widget.projectCreator {
+    width: 160px;
+
+    border-radius: 0;
+}
+.widget.workerCreator {
+    margin: 10px;
+
+    border-radius: 0;
+}
+.widget.taskCreator, .widget.taskEdit {
+    float: none;
+    position: fixed;
+    z-index: 6;
+
+    margin: 0;
+
+    border-radius: 0;
+}
+.widget.taskCreator {
+    left: calc(50% - 100px);
+    top: calc(50% - 68px);
+}
+.widget.taskEdit {
+    left: calc(50% - 215px);
+    top: calc(50% - 96px);
+
+    width: 430px;
+}
+.widget.freeWorkers {
+    height: calc(100% - 285px);
+    margin: 10px;
+    padding: 0;
+
+    border: none;
+
+    background-color: cornsilk;
+    border-radius: 0;
+}
+
+.widget form table {
+    margin: 0 auto;
+}
+
+/*Стили кнопок custom*/
+
+.closeButton, .questionButton {
+    position: absolute;
+    right: 7px;
+    top: 7px;
+
+    width:16px;
+    height: 16px;
+    padding: 0;
+
+    border: 0;
+}
+.closeButton {
+    background: url("images/cross.png");
+    background-position-x: 32px;
+}
+.questionButton {
+    background: url("images/question.png");
+    background-position-x: 32px;
+}
+.closeButton:hover, .questionButton:hover {
+    background-position-x: 48px;
+}
+.closeButton:focus, .questionButton:focus {
+    outline: none;
+    background-position-x: 16px;
+}
+
+.plusButton {
+    display: inline-block;
+    vertical-align: top;
+
+    width:48px;
+    height: 48px;
+    margin: 60px 70px;
+
+    border: 0;
+
+    background: url("images/plus.png");
+    background-position-x: 96px;
+}
+.plusButton:hover {
+    background-position-x: 144px;
+}
+.plusButton:focus {
+    background-position-x: 48px;
+    outline: none;
+}
+
+.closeFormButton {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+
+    width: 96px;
+    height: 96px;
+    padding: 0;
+    border: 0;
+
+    background: url("images/bigCross.png");
+    background-position-x: 192px;
+}
+.closeFormButton:hover {
+    background-position-x: 288px;
+}
+.closeFormButton:focus {
+    background-position-x: 96px;
+    outline: none;
+}
+
+/*Стили контейнеров dragAndDrop*/
+
+.trashCan {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+
+    width: 117px;
+    height: 127px;
+
+    background: url("images/trashCan.png");
+    background-position-x: 245px;
+}
+.trashCan.droping {
+    background-position-x: 117px;
+}
+
+.dragElementsContainer {
+    background-color: ghostwhite;
+    border: 1px solid black;
+}
+.dragElementsContainer.empty:before {
+    content: 'Empty';
+}
+.dragElementsContainer.scrollable {
+    max-height: calc(100% - 35px);
+
+    overflow: auto;
+}
+.dragElementsContainer.droping {
+    border: 3px dashed yellow;
+}
+.dragElementsContainer.droping.reject {
+    border: 3px dashed red;
+}
+
+/*Стили элементов dragAndDrop*/
+
+.worker, .task {
+    position: relative;
+
+    width:154px;
+    margin: 10px;
+
+    border: 1px solid black;
+
+    line-height: 30px;
+    text-align: center;
+
+    background-color: ghostwhite;
+    border-radius: 10px;
+}
+.worker:hover, .task:hover {
+    box-shadow: 2px 2px 2px 0 black;
+}
+
+/*Прочее*/
+
+.tooltip {
+    color: red;
+}
+.hidden {
+    display: none;
+}
+.taskButton {
+    width: auto;
+    margin-top: 15px;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: gray;
+    opacity: 0.7;
+}
+
+.taskDescription {
+    width: 400px;
+    height: 100px;
+
+    resize: none;
 }

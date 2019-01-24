@@ -5,13 +5,137 @@
     <link rel="stylesheet" href="projectOrganizerCSS.css">
     <title>Project organizer</title>
     <script src="projectOrganizerScript.js"></script>
+    <script src="dragAndDropManager.js"></script>
 </head>
-<body style="background-color: beige">
-    <h3 class="title">Project Organizer</h3>
+
+<body>
+
 <script>
     // Создаем элемент интерфейса Создатель проектов
-    let projectCreator = new ProjectCreator("projectCreator", document.body, "Добавить проект:");
+    let projectManager = new ProjectManager({
+        title: 'Project Organizer'
+    });
+    document.body.appendChild(projectManager.render() );
+
+    // Восстанавливаем данные сеанса с сервера
+    getProjects();
+
+    // Инициируем запись данных о текущем сеансе на сервер
+    setTimeout(writeSession, 4000);
+
+    function writeSession () {
+
+        let promise = new Promise((resolve,reject) => {
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', `${getId()}Projects.json`, true);
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            let json = JSON.stringify(projectManager);
+            xhr.send(json);
+            xhr.onreadystatechange = function () {
+                if (xhr.status !== 200) {
+                    reject(xhr.status + xhr.statusText);
+                    return;
+                }
+                if (xhr.status === 200 && xhr.readyState === 4) {
+                    resolve();
+                }
+            }
+        });
+
+        promise.then(res => {
+            setTimeout(writeSession, 4000);
+        },rej => {
+            console.log(rej);
+        });
+    }
+
+    function getProjects () {
+        let id = getId();
+        if (id) {
+
+            //если был сеанс, считываем данные с сервера.
+            let promise = new Promise((resolve,reject) => {
+                let xhr = new XMLHttpRequest();
+                xhr.open('GET', `${id}Projects.json`, true);
+                xhr.timeout = 2000;
+                xhr.send();
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.status !== 200) {
+                        reject(xhr.status + xhr.statusText);
+                        return;
+                    }
+                    if (xhr.status === 200 && xhr.readyState === 4) {
+                        let projects = JSON.parse(xhr.responseText);
+                        resolve(projects);
+                    }
+                }
+            });
+
+            promise.then(res => {
+                reconstruct(res);
+            },rej => {
+                console.log(rej);
+            });
+        }
+    }
+
+    function getId () {
+        // Проверяем сохранение сеанса в cookies
+        let cookies = document.cookie;
+        let array = cookies.split('; ');
+
+        for (let i = 0; i < array.length; i++) {
+            let record = array[i].split('=');
+            let name = record[0];
+            if (name === 'id') {
+                return record[1];
+            }
+        }
+
+        //Записываем id в cookies
+        let date = new Date();
+        let uniqId = date.valueOf();
+
+        date.setDate(date.getDate() + 1);
+        let expires = date.toUTCString();
+
+        document.cookie = `id=${uniqId}; path=/; expires=${expires}`;
+    }
+
+    function reconstruct(projects) {
+        //Восстанавливаем проекты:
+        for (let name in projects) {
+            let project = new Project ( {name: name,
+                manager: projectManager} );
+            projectManager.addProject(project);
+
+            //Восстанавливаем исполнителей:
+            let workers = projects[name].workers;
+            for (let i = 0; i < workers.length; i++) {
+                let options = {id: -i,
+                    firstName: workers[i].firstName,
+                    lastName: workers[i].lastName,
+                    speciality: workers[i].speciality,
+                    container: project};
+                let worker = new Worker(options);
+                project.addDragElement(worker.render() );
+
+                //Восстанавливаем задачи:
+                let tasks = workers[i].tasks;
+                for (let j = 0; j < tasks.length; j++) {
+                    let task = new Task ({name: tasks[j].name});
+                    task.description = tasks[j].description;
+                    worker.tasks.set(task.name, task);
+                }
+            }
+        }
+        projectManager.deleteProjectCreator();
+        projectManager.addPlusProjectButton();
+    }
+
 </script>
+
 
 </body>
 </html>
